@@ -19,13 +19,6 @@ class InsidersController < ApplicationController
       desc: "Our community calls are watchable by anyone, but only Insiders join in the conversation. Come and chat with the team and give us your thoughts and ideas.", filter: true }
   ].freeze
 
-  PARTNERS = [
-    { icon: 'figma', name: 'Figma', offer: 'Get 20% off your monthly subscription!' },
-    { icon: 'figma', name: 'Figma', offer: 'Get 20% off your monthly subscription!' },
-    { icon: 'figma', name: 'Figma', offer: 'Get 20% off your monthly subscription!' },
-    { icon: 'figma', name: 'Figma', offer: 'Get 20% off your monthly subscription!' }
-  ].freeze
-
   # rubocop:enable Layout/LineLength
 
   def index
@@ -33,6 +26,6 @@ class InsidersController < ApplicationController
 
     @features = FEATURES
     @bts_access = BTS_ACCESS
-    @partners = PARTNERS
+    @partners = SupportingOrganisation.featured.select(:name, :slug, :insiders_offer_description)
   end
 end

@@ -68,7 +68,7 @@ FactoryBot.define do
 
     trait :github do
       after(:create) do |user, _evaluator|
-        user.data.update(github_username: handle)
+        user.data.update(github_username: user.handle)
       end
     end
   end

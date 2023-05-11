@@ -28,6 +28,8 @@ class Mentor::Discussion::Create
     # This must be outside of the transaction above as it
     # changes the transaction isolation level
     Mentor::StudentRelationship::CacheNumDiscussions.(mentor, student)
+    User::ResetCache.defer(user, :num_solutions_mentored)
+    User::ResetCache.defer(user, :num_students_mentored)
 
     discussion
   end

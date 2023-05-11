@@ -12,7 +12,7 @@ class AssembleProfileSolutionsList
       solutions,
       serializer: SerializeCommunitySolutions,
       meta: {
-        unscoped_total: user.solutions.published.count
+        unscoped_total: user.profile.num_solutions_published
       }
     )
   end

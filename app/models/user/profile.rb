@@ -8,10 +8,10 @@ class User::Profile < ApplicationRecord
   delegate :to_param, to: :user
 
   memoize
-  def solutions_tab? = user.solutions.published.count > 3
+  def solutions_tab? = num_solutions_published > 3
 
   memoize
-  def testimonials_tab? = user.mentor_testimonials.published.count.positive?
+  def testimonials_tab? = num_testimonials.positive?
 
   memoize
   def contributions_tab?
@@ -20,4 +20,10 @@ class User::Profile < ApplicationRecord
 
   memoize
   def badges_tab? = user.revealed_badges.exists?
+
+  memoize
+  def num_solutions_published = user.solutions.published.count
+
+  memoize
+  def num_testimonials = user.mentor_testimonials.published.count
 end

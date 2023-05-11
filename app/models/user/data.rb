@@ -34,6 +34,9 @@ class User::Data < ApplicationRecord
     has_unrevealed_testimonials?
     has_unrevealed_badges?
     has_unseen_reputation_tokens?
+    num_students_mentored
+    num_solutions_mentored
+    num_testimonials
   ].each do |meth|
     define_method meth do
       self.cache.key?(meth) || User::ResetCache.(user, meth)

@@ -11,6 +11,9 @@ class User::ResetCache
     # Don't call user.update! here
     user.data.update!(cache:)
     cache
+  rescue StaleObjectError
+    user.reload
+    retry
   end
 
   private
@@ -24,4 +27,11 @@ class User::ResetCache
   def value_for_has_unrevealed_testimonials? = user.mentor_testimonials.unrevealed.exists?
   def value_for_has_unrevealed_badges? = user.acquired_badges.unrevealed.exists?
   def value_for_has_unseen_reputation_tokens? = user.reputation_tokens.unseen.exists?
+  def value_for_num_solutions_mentored = user.mentor_discussions.count
+  def value_for_num_testimonials = user.mentor_testimonials.published.count
+
+  # This one is sloooooow!
+  def value_for_num_students_mentored
+    user.mentor_discussions.joins(:solution).distinct.count(:user_id)
+  end
 end

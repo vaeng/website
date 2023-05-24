@@ -371,7 +371,7 @@ class Mentor::DiscussionTest < ActiveSupport::TestCase
     discussion = create(:mentor_discussion, mentor:)
 
     perform_enqueued_jobs do
-      Mentor::UpdateSatisfactionRating.expects(:call).never
+      User::ResetCache.expects(:call).with(mentor, :mentor_satisfaction_percentage).never
 
       discussion.update(status: :finished)
     end

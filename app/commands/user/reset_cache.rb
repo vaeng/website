@@ -11,7 +11,7 @@ class User::ResetCache
     # Don't call user.update! here
     user.data.update!(cache:)
     cache
-  rescue StaleObjectError
+  rescue ActiveRecord::StaleObjectError
     user.reload
     retry
   end
@@ -27,8 +27,9 @@ class User::ResetCache
   def value_for_has_unrevealed_testimonials? = user.mentor_testimonials.unrevealed.exists?
   def value_for_has_unrevealed_badges? = user.acquired_badges.unrevealed.exists?
   def value_for_has_unseen_reputation_tokens? = user.reputation_tokens.unseen.exists?
-  def value_for_num_solutions_mentored = user.mentor_discussions.count
+  def value_for_num_solutions_mentored = user.mentor_discussions.finished_for_mentor.count
   def value_for_num_testimonials = user.mentor_testimonials.published.count
+  def value_for_mentor_satisfaction_percentage = Mentor::CalculateSatisfactionPercentage.(user)
 
   # This one is sloooooow!
   def value_for_num_students_mentored

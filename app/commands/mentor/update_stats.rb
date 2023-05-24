@@ -7,6 +7,7 @@ class Mentor::UpdateStats
 
   def call
     Mentor::UpdateNumSolutionsMentored.(mentor) if update_num_solutions_mentored
-    Mentor::UpdateSatisfactionRating.(mentor) if update_satisfaction_rating
+    Mentor::UpdateSatisfactionPercentage.(mentor) if update_satisfaction_rating
+    User::UpdateMentorRoles.defer(mentor)
   end
 end

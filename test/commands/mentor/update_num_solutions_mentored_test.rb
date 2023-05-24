@@ -3,6 +3,7 @@ require "test_helper"
 class Mentor::UpdateNumSolutionsMentoredTest < ActiveSupport::TestCase
   test "recalculates num_solutions_mentored" do
     mentor = create :user
+    mentor.num_solutions_mentored # Cache it
 
     create :mentor_discussion, mentor:, status: :finished
     create :mentor_discussion, mentor:, status: :mentor_finished

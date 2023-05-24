@@ -22,4 +22,3 @@ class Mentor::CalculateSatisfactionPercentage
     Arel.sql(Mentor::Discussion.where(mentor:).where.not(rating: nil).select("COUNT(*)").to_sql)
   end
 end
-

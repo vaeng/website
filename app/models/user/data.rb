@@ -46,6 +46,18 @@ class User::Data < ApplicationRecord
   end
   def cache = super || (self.cache = {})
 
+  # TODO: Remove once this has been deployed to webservers
+  # and the fields have been updated.
+  %w[
+    num_solutions_mentored
+    mentor_satisfaction_percentage
+  ].each do |meth|
+    define_method "#{meth}=" do |value|
+      self.cache[meth] = value
+      save!
+    end
+  end
+
   FIELDS = %w[
     bio roles usages insiders_status cache
 

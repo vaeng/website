@@ -6,7 +6,7 @@ class ViewComponents::Mentor::HeaderTest < ActionView::TestCase
     sign_in! user
 
     html = render(ViewComponents::Mentor::Header.new(:workspace))
-    assert_includes html, "337 solutions mentored"
+    assert_includes html, "337 discussions completed"
     assert_includes html, "88% satisfaction"
   end
 
@@ -15,7 +15,7 @@ class ViewComponents::Mentor::HeaderTest < ActionView::TestCase
     sign_in! user
 
     html = render(ViewComponents::Mentor::Header.new(:workspace))
-    assert_includes html, "5 solutions mentored"
+    assert_includes html, "5 discussions completed"
     refute_includes html, "satisfaction"
   end
 

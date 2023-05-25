@@ -361,8 +361,6 @@ class Mentor::DiscussionTest < ActiveSupport::TestCase
     mentor = create :user
     discussion = create(:mentor_discussion, mentor:)
 
-    User::SetDiscourseGroups.stubs(:defer)
-
     perform_enqueued_jobs do
       Mentor::UpdateNumSolutionsMentored.expects(:call).never
 

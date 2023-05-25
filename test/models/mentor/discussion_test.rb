@@ -272,6 +272,8 @@ class Mentor::DiscussionTest < ActiveSupport::TestCase
   end
 
   test "recalculates num_solutions_mentored" do
+    User::UpdateMentorRoles.stubs(:defer)
+
     mentor = create :user
 
     perform_enqueued_jobs do
@@ -317,6 +319,8 @@ class Mentor::DiscussionTest < ActiveSupport::TestCase
   end
 
   test "recalculates num_finished_discussions" do
+    User::UpdateMentorRoles.stubs(:defer)
+
     mentor = create :user
     mentorship = create :user_track_mentorship, user: mentor
 
@@ -371,7 +375,7 @@ class Mentor::DiscussionTest < ActiveSupport::TestCase
     discussion = create(:mentor_discussion, mentor:)
 
     perform_enqueued_jobs do
-      User::ResetCache.expects(:call).with(mentor, :mentor_satisfaction_percentage).never
+      Mentor::UpdateSatisfactionPercentage.expects(:call).never
 
       discussion.update(status: :finished)
     end
@@ -380,8 +384,6 @@ class Mentor::DiscussionTest < ActiveSupport::TestCase
   test "does not update num discussions finished if status is unchanged" do
     mentor = create :user
     discussion = create :mentor_discussion, mentor:, status: :finished
-
-    User::SetDiscourseGroups.stubs(:defer)
 
     perform_enqueued_jobs do
       Mentor::Discussion::UpdateNumFinishedDiscussions.expects(:call).never
@@ -393,7 +395,8 @@ class Mentor::DiscussionTest < ActiveSupport::TestCase
   %i[awaiting_student awaiting_mentor mentor_finished].each do |status|
     test "does not update num discussions finished if status is #{status}" do
       mentor = create :user
-      discussion = create(:mentor_discussion, mentor:)
+      # Use status: finished to ensure we always change state
+      discussion = create(:mentor_discussion, mentor:, status: :finished)
 
       perform_enqueued_jobs do
         Mentor::Discussion::UpdateNumFinishedDiscussions.expects(:call).never
